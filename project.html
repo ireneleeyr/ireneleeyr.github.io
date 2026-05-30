@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Concentration Detector | Yerin Lee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --teal: #1a7f74;
+    --teal-light: #e8f5f3;
+    --gold: #c8a86b;
+    --warm-white: #faf9f7;
+    --text: #2a2a2a;
+    --muted: #6b7280;
+    --border: #e2ded8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--text); line-height: 1.7; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,249,247,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 58px;
+  }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--navy); text-decoration: none; }
+  .nav-back { font-size: 0.8rem; color: var(--teal); text-decoration: none; }
+  .nav-back:hover { opacity: 0.8; }
+
+  .hero {
+    min-height: 55vh; padding: 120px 8% 60px;
+    background: linear-gradient(160deg, var(--navy) 0%, #1e3a6e 60%, #1a5f5a 100%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 50%, rgba(26,127,116,0.3) 0%, transparent 60%); }
+  .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; position: relative; display: flex; align-items: center; gap: 0.6rem; }
+  .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; color: white; line-height: 1.1; margin-bottom: 1rem; position: relative; }
+  .hero-meta { color: rgba(255,255,255,0.55); font-size: 0.85rem; position: relative; margin-bottom: 1.5rem; }
+  .author-tag { display: inline-block; background: rgba(200,168,107,0.2); color: var(--gold); border: 1px solid rgba(200,168,107,0.3); font-size: 0.78rem; padding: 0.3rem 0.9rem; border-radius: 3px; position: relative; }
+
+  section { padding: 70px 8%; }
+  .section-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); font-weight: 500; margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
+  .section-label::before { content: ''; width: 22px; height: 1px; background: var(--teal); }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 300; color: var(--navy); margin-bottom: 2rem; line-height: 1.15; }
+
+  /* overview */
+  .overview { background: white; border-bottom: 1px solid var(--border); }
+  .overview-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 5%; align-items: start; }
+  .overview-text p { font-size: 0.92rem; color: #444; margin-bottom: 1rem; font-weight: 300; }
+  .meta-box { background: var(--teal-light); border-radius: 6px; padding: 1.8rem; }
+  .meta-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(26,127,116,0.15); font-size: 0.85rem; }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-key { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .meta-val { color: var(--navy); font-weight: 500; }
+
+  /* motivation */
+  .motivation { background: var(--warm-white); }
+  .problem-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+  .problem-card { border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; background: white; transition: border-color 0.2s; }
+  .problem-card:hover { border-color: var(--teal); }
+  .problem-card .icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .problem-card h3 { font-size: 0.95rem; color: var(--navy); margin-bottom: 0.5rem; }
+  .problem-card p { font-size: 0.83rem; color: var(--muted); font-weight: 300; }
+
+  /* methods */
+  .methods { background: var(--navy); }
+  .methods .section-label { color: var(--gold); }
+  .methods .section-label::before { background: var(--gold); }
+  .methods h2 { color: white; }
+  .methods-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+  .method-block { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 1.8rem; }
+  .method-block h3 { color: var(--gold); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+  .method-block p, .method-block li { color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 300; }
+  .method-block ul { padding-left: 1rem; }
+  .method-block li { margin-bottom: 0.4rem; }
+  .pipeline { display: flex; align-items: center; flex-wrap: wrap; }
+  .pipe-step { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 0.6rem 1rem; color: white; font-size: 0.78rem; text-align: center; flex: 1; min-width: 90px; }
+  .pipe-arrow { color: var(--gold); font-size: 1rem; padding: 0 0.4rem; flex-shrink: 0; }
+
+  /* ── MEDIA SECTION ── */
+  .media-section { background: white; }
+  .media-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+  .media-block { border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+  .media-block h3 { font-size: 0.85rem; font-weight: 500; color: var(--navy); padding: 1rem 1.2rem 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; color: var(--muted); }
+  .media-block video { width: 100%; display: block; background: #000; max-height: 300px; object-fit: cover; }
+  .media-block .vid-label { font-size: 0.78rem; color: var(--muted); padding: 0.6rem 1rem; background: var(--warm-white); }
+
+  .screenshots-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  .screenshot-item { border-radius: 6px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+  .screenshot-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.10); }
+  .screenshot-item img { width: 100%; display: block; object-fit: cover; }
+  .screenshot-item .scr-label { font-size: 0.75rem; color: var(--muted); padding: 0.5rem 0.8rem; background: var(--warm-white); }
+
+  /* lightbox */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 999; align-items: center; justify-content: center; cursor: pointer; }
+  .lightbox.active { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 4px; object-fit: contain; }
+
+  /* results */
+  .results { background: var(--warm-white); }
+  .classes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+  .class-card { border-radius: 6px; padding: 1.8rem; text-align: center; border: 2px solid transparent; transition: transform 0.2s; }
+  .class-card:hover { transform: translateY(-3px); }
+  .class-card.focused { background: #e8f5f3; border-color: var(--teal); }
+  .class-card.sleeping { background: #fff5e6; border-color: #f0a020; }
+  .class-card.absent { background: #fdecea; border-color: #e53935; }
+  .class-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+  .class-name { font-size: 1rem; font-weight: 500; color: var(--navy); margin-bottom: 0.4rem; }
+  .class-id { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.7rem; }
+  .class-desc { font-size: 0.82rem; color: #555; font-weight: 300; }
+
+  /* confidence bars */
+  .confidence-demo { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
+  .conf-title { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .conf-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.7rem; }
+  .conf-label { font-size: 0.82rem; width: 110px; flex-shrink: 0; color: var(--navy); }
+  .conf-bar-bg { flex: 1; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+  .conf-bar { height: 100%; border-radius: 5px; transition: width 1s ease; }
+  .conf-bar.focused { background: var(--teal); }
+  .conf-bar.sleeping { background: #f0a020; }
+  .conf-bar.absent { background: #e53935; }
+  .conf-score { font-size: 0.78rem; color: var(--muted); width: 50px; text-align: right; }
+
+  /* code */
+  .code-block { background: #0d1117; border-radius: 6px; padding: 1.5rem 1.8rem; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.7; overflow-x: auto; }
+  .ck { color: #ff7b72; } .cf { color: #d2a8ff; } .cs { color: #a5d6ff; } .cm { color: #6e7681; } .cn { color: #79c0ff; }
+
+  /* discussion */
+  .discussion { background: var(--teal-light); }
+  .discuss-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .discuss-card { background: white; border-radius: 6px; padding: 1.8rem; border: 1px solid var(--border); }
+  .discuss-card h3 { font-size: 1rem; color: var(--navy); margin-bottom: 1rem; }
+  .discuss-card ul { padding-left: 1rem; }
+  .discuss-card li { font-size: 0.85rem; color: #444; font-weight: 300; margin-bottom: 0.5rem; }
+
+  .back-section { background: var(--navy); padding: 3rem 8%; text-align: center; }
+  .back-section a { display: inline-block; border: 1px solid rgba(255,255,255,0.2); color: white; text-decoration: none; padding: 0.8rem 2rem; border-radius: 3px; font-size: 0.85rem; letter-spacing: 0.06em; transition: background 0.2s; }
+  .back-section a:hover { background: rgba(255,255,255,0.08); }
+  .back-section p { color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-bottom: 1rem; }
+
+  @media (max-width: 800px) {
+    .overview-grid, .methods-grid, .discuss-grid, .media-grid { grid-template-columns: 1fr; }
+    .problem-cards, .classes-grid, .screenshots-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">← Yerin Lee</a>
+  <a href="index.html" class="nav-back">Personal Page</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">EF1003 · Data Literacy Foundation · Term Project 1</div>
+  <h1>AI-Based Study<br>Concentration Detector</h1>
+  <p class="hero-meta">Real-time student state classification via webcam and deep learning</p>
+  <div><span class="author-tag">Yerin Lee (이예린) · 20260861 · KENTECH</span></div>
+</div>
+
+<!-- OVERVIEW -->
+<section class="overview">
+  <div class="section-label">Overview</div>
+  <h2>Project Summary</h2>
+  <div class="overview-grid">
+    <div class="overview-text">
+      <p>This project developed an AI-powered application that monitors a student's study condition in real time using a standard webcam. Using a convolutional neural network trained with Google Teachable Machine, the system classifies the student's state into three categories: <strong>focused</strong>, <strong>sleeping or distracted</strong>, and <strong>absent</strong>.</p>
+      <p>The program captures each webcam frame, preprocesses it, and feeds it into the model to generate a prediction with a confidence score — providing instant feedback on study behavior. The dataset consisted of 150 images per class (450 total), carefully curated to remove blur, duplicates, and bias from lighting and background variation.</p>
+    </div>
+    <div class="meta-box">
+      <div class="meta-row"><span class="meta-key">Course</span><span class="meta-val">EF1003 Data Literacy Foundation</span></div>
+      <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">Term Project 1</span></div>
+      <div class="meta-row"><span class="meta-key">Author</span><span class="meta-val">Yerin Lee</span></div>
+      <div class="meta-row"><span class="meta-key">Student ID</span><span class="meta-val">20260861</span></div>
+      <div class="meta-row"><span class="meta-key">Dataset</span><span class="meta-val">150 × 3 classes = 450 images</span></div>
+      <div class="meta-row"><span class="meta-key">Status</span><span class="meta-val" style="color:var(--teal);">✓ Completed</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MOTIVATION -->
+<section class="motivation">
+  <div class="section-label">Motivation & Problem Definition</div>
+  <h2>Why Does This Matter?</h2>
+  <div class="problem-cards">
+    <div class="problem-card">
+      <div class="icon">😴</div>
+      <h3>The Problem</h3>
+      <p>It is hard to objectively determine whether we are truly focusing or not. Students frequently drift into distraction or sleep without realising it, reducing study efficiency significantly.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🤖</div>
+      <h3>The Approach</h3>
+      <p>A study monitoring system that uses computer vision to automatically detect whether the user is concentrating, sleeping, or absent — and provides immediate, objective feedback.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🎯</div>
+      <h3>The Goal</h3>
+      <p>Provide real-time feedback on study state to promote better focus and improve study efficiency — through a lightweight, accessible AI application built with Python and OpenCV.</p>
+    </div>
+  </div>
+</section>
+
+<!-- METHODS -->
+<section class="methods">
+  <div class="section-label">Dataset & Methods</div>
+  <h2>How It Works</h2>
+  <div class="methods-grid">
+    <div class="method-block">
+      <h3>Dataset Collection & Cleaning</h3>
+      <p>Images were captured via webcam in varied conditions: different postures, angles, and lighting. Initially 200 images per class were collected, then cleaned down to 150 each.</p>
+      <br>
+      <ul>
+        <li>Removed blurry and duplicated images</li>
+        <li>Balanced dataset across 3 classes (150 × 3 = 450)</li>
+        <li>Controlled for lighting and background bias</li>
+        <li><strong style="color:white;">Class 0 — Focused:</strong> proper study posture</li>
+        <li><strong style="color:white;">Class 1 — Sleeping:</strong> eyes closed / head down</li>
+        <li><strong style="color:white;">Class 2 — Absent:</strong> user not visible</li>
+      </ul>
+    </div>
+    <div class="method-block">
+      <h3>Model & Libraries</h3>
+      <p>Trained using Google Teachable Machine (MobileNet-based CNN), exported as Keras .h5. Integrated into Python with the following libraries:</p>
+      <br>
+      <ul>
+        <li><strong style="color:white;">OpenCV:</strong> real-time webcam capture, resize, display</li>
+        <li><strong style="color:white;">TensorFlow/Keras:</strong> load model, run prediction</li>
+        <li><strong style="color:white;">NumPy:</strong> convert frames to arrays, normalize</li>
+      </ul>
+      <br>
+      <p>Input: 224×224×3 RGB · Normalize: (pixel/127.5)−1 · Output: argmax over 3 classes</p>
+    </div>
+  </div>
+  <div class="pipeline">
+    <div class="pipe-step">📷<br>Webcam<br>Capture</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">✂️<br>Resize<br>224×224</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">⚙️<br>Normalize<br>[-1, 1]</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">🧠<br>CNN<br>Inference</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">📊<br>Argmax<br>Class</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">💬<br>Display<br>Result</div>
+  </div>
+</section>
+
+<!-- MEDIA: VIDEOS + CODE SCREENSHOTS -->
+<section class="media-section">
+  <div class="section-label">Demo Videos & Code</div>
+  <h2>See It In Action</h2>
+
+  <div class="media-grid">
+    <div class="media-block">
+      <h3>Demo Video 1 — Focused Detection</h3>
+      <video controls preload="metadata" style="width:100%;display:block;background:#000;max-height:300px;">
+        <source src="demo_video1.mp4" type="video/mp4">
+      </video>
+      <div class="vid-label">🎬 Real-time webcam showing "focused" class detection with confidence scores</div>
+    </div>
+    <div class="media-block">
+      <h3>Demo Video 2 — Full Demo</h3>
+      <video controls preload="metadata" style="width:100%;display:block;background:#000;max-height:300px;">
+        <source src="demo_video2.mp4" type="video/mp4">
+      </video>
+      <div class="vid-label">🎬 Full program run demonstrating all three classification states</div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:2rem;">Actual Code</div>
+  <div style="margin-bottom:1.5rem;">
+    <img src="code_screenshot.png" alt="VS Code — actual project code" onclick="openLightbox(this.src)"
+      style="width:100%;max-width:860px;border-radius:8px;border:1px solid var(--border);cursor:pointer;display:block;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
+    <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;">📸 Actual code in VS Code</div>
+  </div>
+
+</section>
+
+<!-- RESULTS -->
+<section class="results">
+  <div class="section-label">Experiments & Results</div>
+  <h2>Classification Output</h2>
+  <div class="classes-grid">
+    <div class="class-card focused">
+      <div class="class-icon">🎯</div>
+      <div class="class-name">Focused</div>
+      <div class="class-id">Class 0 · Confidence ~0.88–0.99</div>
+      <div class="class-desc">Student actively looking at work. Eyes open, posture upright. Detected with high confidence in clear conditions.</div>
+    </div>
+    <div class="class-card sleeping">
+      <div class="class-icon">😴</div>
+      <div class="class-name">Sleeping / Distracted</div>
+      <div class="class-id">Class 1 · Confidence ~0.999</div>
+      <div class="class-desc">Eyes closed or head tilted. Detected with very high confidence (~0.9998). Some confusion with "focused" for similar postures.</div>
+    </div>
+    <div class="class-card absent">
+      <div class="class-icon">🚶</div>
+      <div class="class-name">Absent</div>
+      <div class="class-id">Class 2 · Confidence ~0.9995</div>
+      <div class="class-desc">No person visible in frame. Most reliably detected class — consistently high confidence across all tests.</div>
+    </div>
+  </div>
+
+  <div class="confidence-demo" style="max-width:500px;">
+    <div class="conf-title">Sample Confidence Output (Focused state)</div>
+    <div class="conf-row">
+      <div class="conf-label">🎯 Focused</div>
+      <div class="conf-bar-bg"><div class="conf-bar focused" style="width:88%;"></div></div>
+      <div class="conf-score">0.879</div>
+    </div>
+    <div class="conf-row">
+      <div class="conf-label">😴 Sleeping</div>
+      <div class="conf-bar-bg"><div class="conf-bar sleeping" style="width:8%;"></div></div>
+      <div class="conf-score">0.08</div>
+    </div>
+    <div class="conf-row">
+      <div class="conf-label">🚶 Absent</div>
+      <div class="conf-bar-bg"><div class="conf-bar absent" style="width:4%;"></div></div>
+      <div class="conf-score">0.04</div>
+    </div>
+  </div>
+
+  <p style="font-size:0.82rem;color:var(--muted);margin-top:1rem;font-weight:300;">
+    ✓ Model performed well on clear cases. &nbsp;⚠ Some confusion between "focused" and "sleeping" due to similar posture patterns and limited dataset diversity.
+  </p>
+</section>
+
+<!-- DISCUSSION -->
+<section class="discussion">
+  <div class="section-label">Discussion & Applications</div>
+  <h2>What We Learned & What's Next</h2>
+  <div class="discuss-grid">
+    <div class="discuss-card">
+      <h3>💪 Strengths</h3>
+      <ul>
+        <li>Simple, practical idea with clear real-world utility</li>
+        <li>Real-time detection with low-latency inference</li>
+        <li>Clear integration of AI model with Python program</li>
+        <li>Careful data curation to reduce bias (lighting, background)</li>
+      </ul>
+      <br>
+      <h3>⚠️ Limitations</h3>
+      <ul>
+        <li>Small dataset (150 images per class) limits generalization</li>
+        <li>Sensitive to lighting conditions and camera angle</li>
+        <li>Some confusion between "focused" and "sleeping/distracted"</li>
+      </ul>
+    </div>
+    <div class="discuss-card">
+      <h3>🧠 Key Learnings</h3>
+      <ul>
+        <li>How to train and export a CNN model with Teachable Machine</li>
+        <li>Real-time AI application development with Python + OpenCV</li>
+        <li>Data quality (cleaning, balancing, bias control) is critical for model performance</li>
+        <li>Iterative testing and improvement are essential steps in any ML project</li>
+      </ul>
+      <br>
+      <h3>🚀 Future Improvements</h3>
+      <ul>
+        <li>Collect more diverse data across people and environments</li>
+        <li>Separate "sleeping" and "distracted" into distinct classes</li>
+        <li>Add a warning alert system and study statistics dashboard</li>
+        <li>Deploy as a standalone desktop app for self-regulated learning</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="back-section">
+  <p>EF1003 Data Literacy Foundation · Term Project 1 · KENTECH 2026</p>
+  <a href="index.html">← Back to Yerin Lee's Personal Page</a>
+</section>
+
+<script>
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
