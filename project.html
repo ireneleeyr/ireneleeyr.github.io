@@ -165,7 +165,7 @@
   <div class="hero-eyebrow">EF1003 · Data Literacy Foundation · Term Project 1</div>
   <h1>AI-Based Study<br>Concentration Detector</h1>
   <p class="hero-meta">Real-time student state classification via webcam and deep learning</p>
-  <div><span class="author-tag">Yerin Lee (이예린) · 20260861 · 이성지 · KENTECH</span></div>
+  <div><span class="author-tag">Yerin Lee (이예린) · 20260861 · KENTECH</span></div>
 </div>
 
 <!-- OVERVIEW -->
@@ -180,7 +180,7 @@
     <div class="meta-box">
       <div class="meta-row"><span class="meta-key">Course</span><span class="meta-val">EF1003 Data Literacy Foundation</span></div>
       <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">Term Project 1</span></div>
-      <div class="meta-row"><span class="meta-key">Authors</span><span class="meta-val">Yerin Lee · 이성지</span></div>
+      <div class="meta-row"><span class="meta-key">Author</span><span class="meta-val">Yerin Lee</span></div>
       <div class="meta-row"><span class="meta-key">Student ID</span><span class="meta-val">20260861</span></div>
       <div class="meta-row"><span class="meta-key">Dataset</span><span class="meta-val">150 × 3 classes = 450 images</span></div>
       <div class="meta-row"><span class="meta-key">Status</span><span class="meta-val" style="color:var(--teal);">✓ Completed</span></div>
@@ -265,17 +265,15 @@
   <div class="media-grid">
     <div class="media-block">
       <h3>Demo Video 1 — Focused Detection</h3>
-      <video controls preload="metadata" poster="">
+      <video controls preload="metadata" style="width:100%;display:block;background:#000;max-height:300px;">
         <source src="demo_video1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
       </video>
       <div class="vid-label">🎬 Real-time webcam showing "focused" class detection with confidence scores</div>
     </div>
     <div class="media-block">
       <h3>Demo Video 2 — Full Demo</h3>
-      <video controls preload="metadata">
+      <video controls preload="metadata" style="width:100%;display:block;background:#000;max-height:300px;">
         <source src="demo_video2.mp4" type="video/mp4">
-        Your browser does not support the video tag.
       </video>
       <div class="vid-label">🎬 Full program run demonstrating all three classification states</div>
     </div>
@@ -283,7 +281,7 @@
 
   <div class="section-label" style="margin-top:2rem;">Actual Code</div>
   <div class="code-block">
-<span class="cm"># ── AI Study Concentration Detector ── Yerin Lee & 이성지, 20260861 ──</span>
+<span class="cm"># ── AI Study Concentration Detector ── Yerin Lee, 20260861 ──</span>
 <span class="ck">import</span> cv2
 <span class="ck">import</span> numpy <span class="ck">as</span> np
 <span class="ck">from</span> tensorflow.keras.models <span class="ck">import</span> <span class="cf">load_model</span>

@@ -64,11 +64,9 @@
   .btn-ghost { color: var(--navy); font-size: 0.85rem; text-decoration: none; letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.4rem; border-bottom: 1px solid var(--border); padding-bottom: 2px; transition: border-color 0.2s, color 0.2s; }
   .btn-ghost:hover { color: var(--teal); border-color: var(--teal); }
   .hero-portrait { position: relative; display: flex; justify-content: center; align-items: center; }
-  .portrait-frame { width: 320px; height: 380px; background: linear-gradient(145deg, var(--teal-light), #d4ece9); border-radius: 4px 60px 4px 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; border: 1px solid rgba(26,127,116,0.2); position: relative; overflow: hidden; }
-  .portrait-frame::after { content: ''; position: absolute; bottom: -20px; right: -20px; width: 140px; height: 140px; background: rgba(26,127,116,0.08); border-radius: 50%; }
-  .portrait-initials { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; color: var(--teal); line-height: 1; }
-  .portrait-name-ko { font-size: 0.9rem; color: var(--muted); letter-spacing: 0.1em; }
-  .portrait-deco { position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; border: 1px solid rgba(26,127,116,0.3); border-radius: 50%; }
+  .portrait-frame { width: 320px; height: 380px; border-radius: 4px 60px 4px 60px; border: 3px solid rgba(26,127,116,0.25); position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(26,127,116,0.18); }
+  .portrait-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+  .portrait-deco { position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; }
 
   section { padding: 80px 8%; }
   .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); font-weight: 500; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
@@ -227,8 +225,7 @@
   <div class="hero-portrait">
     <div class="portrait-frame">
       <div class="portrait-deco"></div>
-      <div class="portrait-initials">YL</div>
-      <div class="portrait-name-ko">이 예 린</div>
+      <img src="profile.png" alt="Yerin Lee">
     </div>
   </div>
 </section>
@@ -238,9 +235,8 @@
   <h2>Hello, I'm Yerin</h2>
   <div class="about-grid">
     <div class="about-text">
-      <p>I am Yerin Lee (이예린), a first-year undergraduate student (2026) at KENTECH, School of Energy Engineering. Born January 13, 2007, I came to KENTECH with a clear sense of purpose — to use science and technology to address the world's most pressing energy and climate challenges.</p>
-      <p>Through a decade of competitive swimming and twelve years of classical piano, I developed the discipline and mental resilience that now shape how I approach engineering. I believe consistent practice, whether in sport, music, or research, is what turns curiosity into expertise.</p>
-      <p>My long-term goal is to become a <em>pro bono scientist</em> — someone who applies rigorous engineering knowledge not just for personal achievement, but for the lasting benefit of society and the environment.</p>
+      <p>I'm Yerin Lee (이예린), a first-year undergraduate at KENTECH's School of Energy Engineering, driven by a clear purpose: to use science and technology to tackle the world's energy and climate challenges.</p>
+      <p>A decade of competitive swimming and twelve years of classical piano have shaped my discipline and resilience — habits I now bring to engineering. My long-term goal is to become a <em>pro bono scientist</em>, applying rigorous knowledge for the lasting benefit of society.</p>
     </div>
     <div class="info-pills">
       <div class="info-pill">
@@ -348,8 +344,8 @@
         </div>
       </div>
       <div class="honor-photos">
-        <img src="toeic_score.jpeg" alt="TOEIC score 925" onclick="openLightbox(this.src)">
-        <img src="duolingo_cert.png" alt="Duolingo English Test 130 Certificate" onclick="openLightbox(this.src)">
+        <img src="toeic_score.png" alt="TOEIC score 925" onclick="openLightbox(this.src)">
+        <img src="duolingo_cert.jpeg" alt="Duolingo English Test 130 Certificate" onclick="openLightbox(this.src)">
       </div>
     </div>
 
